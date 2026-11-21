@@ -1,11 +1,29 @@
-# the-joke-about-the-demo-20261121-0551 entry: one fixed one-liner about AI coding agents.
-# Writes it to /output/entry.txt (MAKEFUN_OUTPUT_DIR stands in for /output
-# outside the grader's container). Deterministic: same bytes every run.
-import os
-from pathlib import Path
+#!/usr/bin/env python3
+"""Save the demo joke as entry.txt in the requested output folder.
 
-JOKE = "During the demo my agent whispered 'fixed it'. The bug is gone. So is the button I was about to click."
+The output is the same on every run: one file, one fixed line.
+"""
 
-out = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
-out.mkdir(parents=True, exist_ok=True)
-(out / "entry.txt").write_text(JOKE, encoding="utf-8")
+from os import environ, makedirs
+from os.path import join as join_path
+
+PUNCHLINE = "During the demo my agent whispered 'fixed it'. The bug is gone. So is the button I was about to click."
+
+
+def target_folder():
+    """Return the folder the entry file belongs in."""
+    chosen = environ.get("MAKEFUN_OUTPUT_DIR")
+    return chosen if chosen else "/output"
+
+
+def main():
+    folder = target_folder()
+    makedirs(folder, exist_ok=True)
+    destination = join_path(folder, "entry.txt")
+    with open(destination, "w", encoding="utf-8") as handle:
+        handle.write(PUNCHLINE + "\n")
+    print(destination)
+
+
+if __name__ == "__main__":
+    main()
